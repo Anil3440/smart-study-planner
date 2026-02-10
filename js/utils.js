@@ -101,20 +101,19 @@ function sanitizeHTML(str) {
 }
 
 function getPriorityBadge(priority) {
-    const colors = {
-        high: 'var(--danger)',
-        medium: 'var(--warning)',
-        low: 'var(--info)'
+    const classes = {
+        high: 'badge badge-priority-high',
+        medium: 'badge badge-priority-medium',
+        low: 'badge badge-priority-low'
     };
-
-    return `<span class="badge" style="background: ${colors[priority]}20; color: ${colors[priority]}; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.85rem; font-weight: 500;">${priority.charAt(0).toUpperCase() + priority.slice(1)}</span>`;
+    const text = priority.charAt(0).toUpperCase() + priority.slice(1);
+    return `<span class="${classes[priority]}">${text}</span>`;
 }
 
 function getStatusBadge(completed) {
-    const color = completed ? 'var(--success)' : 'var(--text-tertiary)';
+    const className = completed ? 'badge badge-priority-low' : 'badge';
     const text = completed ? 'Completed' : 'Pending';
-
-    return `<span class="badge" style="background: ${color}20; color: ${color}; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.85rem; font-weight: 500;">${text}</span>`;
+    return `<span class="${className}">${text}</span>`;
 }
 
 function escapeRegex(str) {

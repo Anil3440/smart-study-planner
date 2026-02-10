@@ -3,14 +3,14 @@ function renderSettings() {
     const settings = getSettings();
 
     container.innerHTML = `
-        <div style="max-width: 800px;">
-            <div class="card" style="margin-bottom: var(--spacing-xl);">
-                <h3 style="margin-bottom: var(--spacing-lg);">Appearance</h3>
+        <div class="settings-container">
+            <div class="card mb-xl">
+                <h3 class="mb-lg">Appearance</h3>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
-                    <div>
-                        <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-xs);">Theme</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Choose your preferred color scheme</p>
+                <div class="settings-item">
+                    <div class="settings-info">
+                        <h4>Theme</h4>
+                        <p>Choose your preferred color scheme</p>
                     </div>
                     <div class="btn-group">
                         <button class="btn btn-secondary ${settings.theme === 'light' ? 'active' : ''}" onclick="changeTheme('light')">Light</button>
@@ -19,26 +19,26 @@ function renderSettings() {
                 </div>
             </div>
             
-            <div class="card" style="margin-bottom: var(--spacing-xl);">
-                <h3 style="margin-bottom: var(--spacing-lg);">Preferences</h3>
+            <div class="card mb-xl">
+                <h3 class="mb-lg">Preferences</h3>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
-                    <div>
-                        <h4 style="color: var(--text-primary); margin-bottom: var(--spacing-xs);">Notifications</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Enable deadline reminders</p>
+                <div class="settings-item">
+                    <div class="settings-info">
+                        <h4>Notifications</h4>
+                        <p>Enable deadline reminders</p>
                     </div>
                     <label style="cursor: pointer;">
-                        <input type="checkbox" ${settings.notifications ? 'checked' : ''} onchange="updateNotifications(this.checked)" style="width: 24px; height: 24px; cursor: pointer;">
+                        <input type="checkbox" ${settings.notifications ? 'checked' : ''} onchange="updateNotifications(this.checked)" class="settings-checkbox">
                     </label>
                 </div>
             </div>
             
             <div class="card">
-                <h3 style="margin-bottom: var(--spacing-lg); color: var(--danger);">Reset Data</h3>
+                <h3 class="mb-lg danger-text">Reset Data</h3>
                 
-                <div style="padding: var(--spacing-md); background: var(--bg-secondary); border-radius: var(--radius-md);">
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: var(--spacing-md);">Delete all subjects, schedules, and tasks. This cannot be undone!</p>
-                    <button class="btn btn-secondary" style="color: var(--danger);" onclick="resetDataHandler()">Reset All Data</button>
+                <div class="settings-item">
+                    <p class="empty-state-text" style="margin-bottom: var(--spacing-md);">Delete all subjects, schedules, and tasks. This cannot be undone!</p>
+                    <button class="btn btn-secondary btn-danger-text" onclick="resetDataHandler()">Reset All Data</button>
                 </div>
             </div>
         </div>
