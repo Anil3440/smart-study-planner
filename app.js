@@ -169,7 +169,8 @@ function setupSidebarToggle() {
 
     // Toggle sidebar when clicking the hamburger menu
     if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', () => {
+        sidebarToggle.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent click from bubbling to document
             sidebar.classList.toggle('active');
         });
     }
@@ -178,8 +179,8 @@ function setupSidebarToggle() {
     document.addEventListener('click', (e) => {
         // Only on mobile screens (768px or less)
         if (window.innerWidth <= 768) {
-            // If click is outside sidebar AND sidebar is open
-            if (!sidebar.contains(e.target) && sidebar.classList.contains('active')) {
+            // If click is outside sidebar AND outside toggle button AND sidebar is open
+            if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target) && sidebar.classList.contains('active')) {
                 sidebar.classList.remove('active');
             }
         }

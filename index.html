@@ -103,6 +103,38 @@
         .dark ::-webkit-scrollbar-thumb:hover {
             background: #4a4a4a;
         }
+
+        /* Responsive Sidebar Styles */
+        @media (max-width: 768px) {
+
+            /* Hide sidebar by default on mobile */
+            #sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            /* Show sidebar when active */
+            #sidebar.active {
+                transform: translateX(0);
+            }
+
+            /* Remove left margin from main content on mobile */
+            main {
+                margin-left: 0 !important;
+            }
+
+            /* Add overlay when sidebar is open */
+            #sidebar.active::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: -1;
+            }
+        }
     </style>
 </head>
 
@@ -186,11 +218,14 @@
         <!-- ============================================ -->
         <!-- MAIN CONTENT AREA -->
         <!-- ============================================ -->
-        <main class="flex-1 ml-64 p-8">
+        <main class="flex-1 md:ml-64 p-8">
             <!-- Mobile Menu Toggle Button -->
             <button id="sidebarToggle"
-                class="fixed top-4 left-4 z-40 md:hidden w-10 h-10 flex items-center justify-center rounded-md bg-black/10 dark:bg-white/10 text-2xl">
-                ☰
+                class="fixed top-4 left-4 z-[60] md:hidden w-12 h-12 flex items-center justify-center rounded-lg bg-[#6b4423] dark:bg-white text-white dark:text-black shadow-lg hover:bg-[#8b5a3c] dark:hover:bg-gray-200 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
             </button>
 
             <!-- Dashboard Section -->
