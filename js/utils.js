@@ -1,18 +1,25 @@
+// Generate unique ID
 function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
+// Format date as "Jan 15, 2026"
 function formatDate(date) {
     const d = new Date(date);
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return d.toLocaleDateString('en-US', options);
+    return d.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
 }
 
+// Format date for input field (YYYY-MM-DD)
 function formatDateInput(date) {
     const d = new Date(date);
     return d.toISOString().split('T')[0];
 }
 
+// Convert 24-hour time to 12-hour format (9:00 AM)
 function formatTime(time) {
     const [hours, minutes] = time.split(':');
     const h = parseInt(hours);
@@ -21,21 +28,12 @@ function formatTime(time) {
     return `${displayHour}:${minutes} ${ampm}`;
 }
 
-function getDayName(date) {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return days[new Date(date).getDay()];
-}
-
+// Get current day number (0=Sunday, 1=Monday, etc.)
 function getCurrentDay() {
     return new Date().getDay();
 }
 
-function isToday(date) {
-    const today = new Date();
-    const d = new Date(date);
-    return d.toDateString() === today.toDateString();
-}
-
+// Check if date is overdue
 function isOverdue(date) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -44,6 +42,7 @@ function isOverdue(date) {
     return d < today;
 }
 
+// Get number of days until date
 function getDaysUntil(date) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -53,6 +52,13 @@ function getDaysUntil(date) {
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
+// Convert time string to minutes (9:30 -> 570)
+function timeToMinutes(time) {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+}
+
+// Check if two schedules conflict
 function hasTimeConflict(schedules, newSchedule, excludeId = null) {
     return schedules.some(schedule => {
         if (schedule.id === excludeId) return false;
@@ -67,94 +73,56 @@ function hasTimeConflict(schedules, newSchedule, excludeId = null) {
     });
 }
 
-function timeToMinutes(time) {
-    const [hours, minutes] = time.split(':').map(Number);
-    return hours * 60 + minutes;
-}
-
+// Show notification message
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
-    const toastIcon = toast.querySelector('.toast-icon');
 
+    // Update message
     toastMessage.textContent = message;
 
-    const iconPath = type === 'success'
-        ? 'M20 6L9 17L4 12'
-        : 'M12 8V12M12 16H12.01';
-    toastIcon.querySelector('path').setAttribute('d', iconPath);
+    // Update color based on type
+    if (type === 'success') {
+        toast.className = 'fixed bottom-8 right-8 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transition-all duration-300 z-50 translate-y-0 opacity-100';
+    } else {
+        toast.className = 'fixed bottom-8 right-8 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transition-all duration-300 z-50 translate-y-0 opacity-100';
+    }
 
-    const color = type === 'success' ? 'var(--success)' : 'var(--danger)';
-    toastIcon.style.color = color;
-
-    toast.classList.add('active');
-
+    // Hide after 3 seconds
     setTimeout(() => {
-        toast.classList.remove('active');
+        toast.classList.add('translate-y-32', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
     }, 3000);
 }
 
+// Prevent XSS attacks by escaping HTML
 function sanitizeHTML(str) {
     const temp = document.createElement('div');
     temp.textContent = str;
     return temp.innerHTML;
 }
 
+// Create priority badge HTML
 function getPriorityBadge(priority) {
     const classes = {
-        high: 'badge badge-priority-high',
-        medium: 'badge badge-priority-medium',
-        low: 'badge badge-priority-low'
+        high: 'px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+        medium: 'px-2 py-1 text-xs font-semibold rounded bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+        low: 'px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
     };
     const text = priority.charAt(0).toUpperCase() + priority.slice(1);
     return `<span class="${classes[priority]}">${text}</span>`;
 }
 
+// Create status badge HTML
 function getStatusBadge(completed) {
-    const className = completed ? 'badge badge-priority-low' : 'badge';
+    const className = completed
+        ? 'px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+        : 'px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
     const text = completed ? 'Completed' : 'Pending';
     return `<span class="${className}">${text}</span>`;
 }
 
-function escapeRegex(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-function getWeekDates(startDay = 0) {
-    const today = new Date();
-    const currentDay = today.getDay();
-    const diff = currentDay - startDay;
-    const sunday = new Date(today);
-    sunday.setDate(today.getDate() - diff);
-
-    const weekDates = [];
-    for (let i = 0; i < 7; i++) {
-        const date = new Date(sunday);
-        date.setDate(sunday.getDate() + i);
-        weekDates.push(date);
-    }
-
-    return weekDates;
-}
-
-function calculateCompletionRate(tasks) {
-    if (tasks.length === 0) return 0;
-    const completed = tasks.filter(t => t.completed).length;
-    return Math.round((completed / tasks.length) * 100);
-}
-
+// Group array items by a key
 function groupBy(array, key) {
     return array.reduce((result, item) => {
         const group = item[key];
@@ -166,6 +134,7 @@ function groupBy(array, key) {
     }, {});
 }
 
+// Sort array by date
 function sortByDate(array, key, ascending = true) {
     return array.sort((a, b) => {
         const dateA = new Date(a[key]);
