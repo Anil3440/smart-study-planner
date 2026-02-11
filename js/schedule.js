@@ -197,7 +197,7 @@ function saveSchedule(event, scheduleId) {
         location: document.getElementById('scheduleLocation').value.trim()
     };
 
-    if (hasTimeConflict(data, scheduleId)) {
+    if (hasTimeConflict(getSchedules(), data, scheduleId)) {
         showToast('Time conflict with existing schedule!', 'error');
         return;
     }

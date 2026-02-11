@@ -58,10 +58,10 @@ function renderSubjectCard(subject) {
             
             <div class="flex gap-2">
                 <button class="flex-1 px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors flex items-center justify-center gap-2" onclick="editSubject('${subject.id}')">
-                    ✏️ Edit
+                     Edit
                 </button>
                 <button class="flex-1 px-3 py-2 bg-gray-200 dark:bg-gray-700 text-red-600 dark:text-red-400 rounded-md text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center justify-center gap-2" onclick="deleteSubjectConfirm('${subject.id}')">
-                    🗑️ Delete
+                     Delete
                 </button>
             </div>
         </div>
